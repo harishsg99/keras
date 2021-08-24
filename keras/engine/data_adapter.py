@@ -1564,7 +1564,13 @@ def unpack_x_y_sample_weight(data):
     The unpacked tuple, with `None`s for `y` and `sample_weight` if they are not
     provided.
   """
+  try:
+    data = tuple( data )
+  except TypeError as err:
+    print( err )
   if not isinstance(data, tuple):
+    ## Or the warning alternative:
+    print( "Warning: the object used as validation data is not of type Tuple, the entire object will be used as it, instead of treating the object in a similar way as (val_in, val_out, sample_weights)!" )
     return (data, None, None)
   elif len(data) == 1:
     return (data[0], None, None)
@@ -1576,6 +1582,7 @@ def unpack_x_y_sample_weight(data):
     error_msg = ("Data is expected to be in format `x`, `(x,)`, `(x, y)`, "
                  "or `(x, y, sample_weight)`, found: {}").format(data)
     raise ValueError(error_msg)
+
 
 
 @keras_export("keras.utils.pack_x_y_sample_weight", v1=[])
